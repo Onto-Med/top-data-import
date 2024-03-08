@@ -1,6 +1,7 @@
 package care.smith.top.top_data_import.csv;
 
 import care.smith.top.model.DataType;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
@@ -41,6 +42,18 @@ public class CSVField {
 
   public int getIndex() {
     return index;
+  }
+
+  public BigDecimal getNumberValue() {
+    return new BigDecimal(value);
+  }
+
+  public LocalDateTime getDateValue() {
+    return parseDate(value);
+  }
+
+  public boolean getBooleanValue() {
+    return Boolean.valueOf(value);
   }
 
   public void setDataType(String val) {
