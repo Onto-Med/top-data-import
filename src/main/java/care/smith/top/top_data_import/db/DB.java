@@ -222,7 +222,7 @@ public class DB {
   }
 
   public static void main(String[] args) {
-    Config config = Config.getInstance("test_files/config.properties");
+    Config config = new Config("test_files/config.properties");
     DB db = new DB(config);
 
     db.insertSbj(1, "2000-01-02", "male")
