@@ -7,32 +7,52 @@ import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoField;
 
-public class Field {
+public class CSVField {
 
-  private String value;
+  private String name;
   private DataType dataType;
+  private String value;
+  private int index;
 
-  public Field(String value) {
-    this.value = value;
+  public CSVField(String name) {
+    if (name == null || name.isBlank())
+      throw new IllegalArgumentException("The CSV header fields must not be empty!");
+    this.name = name.trim();
   }
 
-  public String getValue() {
-    return value;
+  public CSVField(CSVField field, String value, int index) {
+    this.name = field.getName();
+    this.dataType = field.getDataType();
+    if (value != null) this.value = value.trim();
+    this.index = index;
+  }
+
+  public String getName() {
+    return name;
   }
 
   public DataType getDataType() {
     return dataType;
   }
 
-  public void setDataType(String value) {
-    if (dataType == DataType.STRING || value == null || value.isBlank()) return;
-    if (isNumber(value)) {
+  public String getValue() {
+    return value;
+  }
+
+  public int getIndex() {
+    return index;
+  }
+
+  public void setDataType(String val) {
+    if (dataType == DataType.STRING || val == null || val.isBlank()) return;
+    val = val.trim();
+    if (isNumber(val)) {
       if (dataType == null) dataType = DataType.NUMBER;
       else if (dataType != DataType.NUMBER) dataType = DataType.STRING;
-    } else if (isDate(value)) {
+    } else if (isDate(val)) {
       if (dataType == null) dataType = DataType.DATE_TIME;
       else if (dataType != DataType.DATE_TIME) dataType = DataType.STRING;
-    } else if (isBoolean(value)) {
+    } else if (isBoolean(val)) {
       if (dataType == null) dataType = DataType.BOOLEAN;
       else if (dataType != DataType.BOOLEAN) dataType = DataType.STRING;
     } else dataType = DataType.STRING;
@@ -75,6 +95,6 @@ public class Field {
 
   @Override
   public String toString() {
-    return value + ":" + dataType;
+    return name + ":" + value + ":" + dataType + ":" + index;
   }
 }

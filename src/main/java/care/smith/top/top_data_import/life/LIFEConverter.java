@@ -1,24 +1,22 @@
 package care.smith.top.top_data_import.life;
 
-import care.smith.top.top_data_import.csv.CSV;
-import java.io.IOException;
-import java.nio.file.Files;
+import care.smith.top.top_data_import.csv.CSVConverter;
+import care.smith.top.top_data_import.csv.CSVRecord;
 import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.util.Arrays;
 
-public class LIFEConverter {
+public class LIFEConverter extends CSVConverter {
 
-  public void convert(Path directoryPath) throws IOException {
-    Files.list(directoryPath)
-        .filter(p -> !Files.isDirectory(p) && p.toString().endsWith(".csv"))
-        .forEach(
-            p -> {
-              System.out.println(p);
-              new CSV().read(p);
-            });
+  public LIFEConverter(Path path) {
+    super(path);
   }
 
-  public static void main(String[] args) throws IOException {
-    new LIFEConverter().convert(Paths.get("test_files/csv"));
+  @Override
+  protected void convert(CSVRecord csvRecord) {
+    System.out.println(csvRecord);
+    System.out.println(csvRecord.get(3));
+    System.out.println(csvRecord.get("SOZIO_F0003"));
+    System.out.println(Arrays.toString(csvRecord.getOthers("ID", "GRP", "SOZIO_F0002")));
+    System.out.println();
   }
 }
