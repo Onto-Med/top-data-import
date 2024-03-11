@@ -14,6 +14,9 @@ public class CSVField {
   private DataType dataType;
   private String value;
   private int index;
+  private String codeSystem;
+  private String code;
+  private String unit;
 
   public CSVField(String name) {
     if (name == null || name.isBlank())
@@ -24,36 +27,94 @@ public class CSVField {
   public CSVField(CSVField field, String value, int index) {
     this.name = field.getName();
     this.dataType = field.getDataType();
-    if (value != null) this.value = value.trim();
+    if (value != null && !value.isBlank()) this.value = value.trim();
     this.index = index;
+  }
+
+  public CSVField(String name, String value, DataType dataType, String codeSystem, String code) {
+    this(name);
+    this.value = value;
+    this.dataType = dataType;
+    this.codeSystem = codeSystem;
+    this.code = code;
+  }
+
+  public CSVField(String name, String value, DataType dataType) {
+    this(name);
+    this.value = value;
+    this.dataType = dataType;
   }
 
   public String getName() {
     return name;
   }
 
+  public void setName(String name) {
+    this.name = name;
+  }
+
   public DataType getDataType() {
     return dataType;
+  }
+
+  public void setDataType(DataType dataType) {
+    this.dataType = dataType;
   }
 
   public String getValue() {
     return value;
   }
 
+  public void setValue(String value) {
+    this.value = value;
+  }
+
   public int getIndex() {
     return index;
   }
 
+  public void setIndex(int index) {
+    this.index = index;
+  }
+
+  public String getCodeSystem() {
+    return codeSystem;
+  }
+
+  public void setCodeSystem(String codeSystem) {
+    this.codeSystem = codeSystem;
+  }
+
+  public String getCode() {
+    return code;
+  }
+
+  public void setCode(String code) {
+    this.code = code;
+  }
+
+  public String getUnit() {
+    return unit;
+  }
+
+  public void setUnit(String unit) {
+    this.unit = unit;
+  }
+
   public BigDecimal getNumberValue() {
-    return new BigDecimal(value);
+    return (value == null || dataType != DataType.NUMBER) ? null : new BigDecimal(value);
   }
 
   public LocalDateTime getDateValue() {
-    return parseDate(value);
+    return (value == null || dataType != DataType.DATE_TIME) ? null : parseDate(value);
   }
 
-  public boolean getBooleanValue() {
-    return Boolean.valueOf(value);
+  public Boolean getBooleanValue() {
+    return (value == null || dataType != DataType.BOOLEAN) ? null : Boolean.valueOf(value);
+  }
+
+  public String getStringValue() {
+    return (dataType != DataType.STRING) ? null : value;
   }
 
   public void setDataType(String val) {
