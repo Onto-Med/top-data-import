@@ -55,12 +55,12 @@ public class DB {
   }
 
   public void insertSbj(CSVField idField, CSVField bdField, CSVField sexField) {
-    insertSbj(idField.getStringValue(), getDateValue(bdField), getStringValue(sexField));
+    insertSbj(idField.getValue(), getDateValue(bdField), getStringValue(sexField));
   }
 
   public void insertSbj(String id, LocalDateTime bd, String sex) {
     execute(
-        "INSERT INTO subject VALUES ("
+        "MERGE INTO subject VALUES ("
             + String.join(", ", quote(id), quote(format(bd)), quote(sex))
             + ")");
   }
@@ -167,7 +167,13 @@ public class DB {
     CSVField id3Phe2Date = new CSVField("SOZIO_EDAT", "2023-05-06T01:02:03", DataType.DATE_TIME);
 
     db.insertSbj(id1, null, null);
+    db.insertSbj(id1, null, null);
+    db.insertSbj(id1, null, null);
     db.insertSbj(id2, id3Bd, null);
+    db.insertSbj(id2, id3Bd, null);
+    db.insertSbj(id2, id3Bd, null);
+    db.insertSbj(id3, null, id2Sex);
+    db.insertSbj(id3, null, id2Sex);
     db.insertSbj(id3, null, id2Sex);
 
     db.insertPhe(id3, id3Phe1, null);

@@ -18,6 +18,10 @@ public class Config {
     }
   }
 
+  public String getCsvPath() {
+    return props.getProperty("csv.path");
+  }
+
   public String getDbUrl() {
     return props.getProperty("db.url");
   }
@@ -28,6 +32,22 @@ public class Config {
 
   public String getDbPw() {
     return props.getProperty("db.pw");
+  }
+
+  public String getColId() {
+    return props.getProperty("col.id");
+  }
+
+  public String getColDate() {
+    return props.getProperty("col.date");
+  }
+
+  public String getColSex() {
+    return props.getProperty("col.sex");
+  }
+
+  public String getColBirthDate() {
+    return props.getProperty("col.birthdate");
   }
 
   @Override

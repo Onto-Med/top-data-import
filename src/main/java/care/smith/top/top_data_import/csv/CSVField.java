@@ -93,6 +93,12 @@ public class CSVField {
     this.code = code;
   }
 
+  public CSVField code(String codeSystem, String code) {
+    this.codeSystem = codeSystem;
+    this.code = code;
+    return this;
+  }
+
   public String getUnit() {
     return unit;
   }
