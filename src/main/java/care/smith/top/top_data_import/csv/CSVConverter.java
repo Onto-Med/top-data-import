@@ -6,12 +6,12 @@ import com.opencsv.exceptions.CsvValidationException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
+import java.util.stream.IntStream;
 
 public abstract class CSVConverter {
 
   private Path path;
-  private CSVField[] header;
+  private CSVHead[] header;
 
   public CSVConverter(Path path) {
     this.path = path;
@@ -19,7 +19,12 @@ public abstract class CSVConverter {
       CSVReader csvReader = getReader(path);
       String[] headerLine = csvReader.readNext();
       if (headerLine == null) return;
-      header = Arrays.stream(headerLine).map(h -> new CSVField(h)).toArray(CSVField[]::new);
+
+      header =
+          IntStream.range(0, headerLine.length)
+              .mapToObj(i -> new CSVHead(headerLine[i]).index(i))
+              .toArray(CSVHead[]::new);
+
       String[] line;
       while ((line = csvReader.readNext()) != null)
         for (int i = 0; i < line.length; i++) header[i].setDataType(line[i]);
@@ -27,6 +32,10 @@ public abstract class CSVConverter {
     } catch (IOException | CsvValidationException e) {
       e.printStackTrace();
     }
+  }
+
+  public CSVHead[] getHeader() {
+    return header;
   }
 
   public void convert() {

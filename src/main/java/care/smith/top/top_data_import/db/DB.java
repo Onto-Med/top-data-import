@@ -2,7 +2,7 @@ package care.smith.top.top_data_import.db;
 
 import care.smith.top.model.DataType;
 import care.smith.top.top_data_import.Config;
-import care.smith.top.top_data_import.csv.CSVField;
+import care.smith.top.top_data_import.csv.CSVValue;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -54,7 +54,7 @@ public class DB {
     execute(CREATE_PHE);
   }
 
-  public void insertSbj(CSVField idField, CSVField bdField, CSVField sexField) {
+  public void insertSbj(CSVValue idField, CSVValue bdField, CSVValue sexField) {
     insertSbj(idField.getValue(), getDateValue(bdField), getStringValue(sexField));
   }
 
@@ -65,7 +65,7 @@ public class DB {
             + ")");
   }
 
-  public void insertPhe(CSVField sbjIdField, CSVField pheField, CSVField dateField) {
+  public void insertPhe(CSVValue sbjIdField, CSVValue pheField, CSVValue dateField) {
     insertPhe(
         sbjIdField.getValue(),
         getDateValue(dateField),
@@ -116,11 +116,11 @@ public class DB {
     return (o == null) ? null : o.toString();
   }
 
-  private String getStringValue(CSVField f) {
+  private String getStringValue(CSVValue f) {
     return (f == null) ? null : f.getStringValue();
   }
 
-  private LocalDateTime getDateValue(CSVField f) {
+  private LocalDateTime getDateValue(CSVValue f) {
     return (f == null) ? null : f.getDateValue();
   }
 
@@ -155,16 +155,16 @@ public class DB {
     Config config = new Config("test_files/config.properties");
     DB db = new DB(config);
 
-    CSVField id1 = new CSVField("SOZIO_SIC", "1", DataType.STRING);
+    CSVValue id1 = new CSVValue("SOZIO_SIC", "1", DataType.STRING);
 
-    CSVField id2 = new CSVField("SOZIO_SIC", "2", DataType.STRING);
-    CSVField id2Sex = new CSVField("SOZIO_SEX", "female", DataType.STRING);
+    CSVValue id2 = new CSVValue("SOZIO_SIC", "2", DataType.STRING);
+    CSVValue id2Sex = new CSVValue("SOZIO_SEX", "female", DataType.STRING);
 
-    CSVField id3 = new CSVField("SOZIO_SIC", "3", DataType.STRING);
-    CSVField id3Bd = new CSVField("SOZIO_BIRTHDATE", "1999-01-01T00:00", DataType.DATE_TIME);
-    CSVField id3Phe1 = new CSVField("SOZIO_F0001", "123", DataType.NUMBER, "SOZIO", "F0001");
-    CSVField id3Phe2 = new CSVField("SOZIO_F0002", "ABC", DataType.STRING, "SOZIO", "F0002");
-    CSVField id3Phe2Date = new CSVField("SOZIO_EDAT", "2023-05-06T01:02:03", DataType.DATE_TIME);
+    CSVValue id3 = new CSVValue("SOZIO_SIC", "3", DataType.STRING);
+    CSVValue id3Bd = new CSVValue("SOZIO_BIRTHDATE", "1999-01-01T00:00", DataType.DATE_TIME);
+    CSVValue id3Phe1 = new CSVValue("SOZIO_F0001", "123", DataType.NUMBER, "SOZIO", "F0001");
+    CSVValue id3Phe2 = new CSVValue("SOZIO_F0002", "ABC", DataType.STRING, "SOZIO", "F0002");
+    CSVValue id3Phe2Date = new CSVValue("SOZIO_EDAT", "2023-05-06T01:02:03", DataType.DATE_TIME);
 
     db.insertSbj(id1, null, null);
     db.insertSbj(id1, null, null);

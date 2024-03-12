@@ -1,47 +1,36 @@
 package care.smith.top.top_data_import.csv;
 
 import care.smith.top.model.DataType;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoField;
 
-public class CSVField {
+public class CSVHead {
 
   private String name;
   private DataType dataType;
-  private String value;
-  private int index;
   private String codeSystem;
   private String code;
   private String unit;
+  private int index;
 
-  public CSVField(String name) {
+  public CSVHead(String name) {
     if (name == null || name.isBlank())
       throw new IllegalArgumentException("The CSV header fields must not be empty!");
     this.name = name.trim();
   }
 
-  public CSVField(CSVField field, String value, int index) {
-    this.name = field.getName();
-    this.dataType = field.getDataType();
-    if (value != null && !value.isBlank()) this.value = value.trim();
-    this.index = index;
-  }
-
-  public CSVField(String name, String value, DataType dataType, String codeSystem, String code) {
+  public CSVHead(String name, DataType dataType, String codeSystem, String code) {
     this(name);
-    this.value = value;
     this.dataType = dataType;
     this.codeSystem = codeSystem;
     this.code = code;
   }
 
-  public CSVField(String name, String value, DataType dataType) {
+  public CSVHead(String name, DataType dataType) {
     this(name);
-    this.value = value;
     this.dataType = dataType;
   }
 
@@ -49,51 +38,43 @@ public class CSVField {
     return name;
   }
 
-  public void setName(String name) {
+  public CSVHead name(String name) {
     this.name = name;
+    return this;
   }
 
   public DataType getDataType() {
     return dataType;
   }
 
-  public void setDataType(DataType dataType) {
+  public CSVHead dataType(DataType dataType) {
     this.dataType = dataType;
-  }
-
-  public String getValue() {
-    return value;
-  }
-
-  public void setValue(String value) {
-    this.value = value;
-  }
-
-  public int getIndex() {
-    return index;
-  }
-
-  public void setIndex(int index) {
-    this.index = index;
+    return this;
   }
 
   public String getCodeSystem() {
     return codeSystem;
   }
 
-  public void setCodeSystem(String codeSystem) {
+  public CSVHead codeSystem(String codeSystem) {
     this.codeSystem = codeSystem;
+    return this;
   }
 
   public String getCode() {
     return code;
   }
 
-  public void setCode(String code) {
+  public CSVHead code(String code) {
     this.code = code;
+    return this;
   }
 
-  public CSVField code(String codeSystem, String code) {
+  public CSVHead code(String[] code) {
+    return code(code[0], code[1]);
+  }
+
+  public CSVHead code(String codeSystem, String code) {
     this.codeSystem = codeSystem;
     this.code = code;
     return this;
@@ -103,24 +84,18 @@ public class CSVField {
     return unit;
   }
 
-  public void setUnit(String unit) {
+  public CSVHead unit(String unit) {
     this.unit = unit;
+    return this;
   }
 
-  public BigDecimal getNumberValue() {
-    return (value == null || dataType != DataType.NUMBER) ? null : new BigDecimal(value);
+  public int getIndex() {
+    return index;
   }
 
-  public LocalDateTime getDateValue() {
-    return (value == null || dataType != DataType.DATE_TIME) ? null : parseDate(value);
-  }
-
-  public Boolean getBooleanValue() {
-    return (value == null || dataType != DataType.BOOLEAN) ? null : Boolean.valueOf(value);
-  }
-
-  public String getStringValue() {
-    return (dataType != DataType.STRING) ? null : value;
+  public CSVHead index(int index) {
+    this.index = index;
+    return this;
   }
 
   public void setDataType(String val) {
@@ -175,6 +150,6 @@ public class CSVField {
 
   @Override
   public String toString() {
-    return name + ":" + value + ":" + dataType + ":" + index;
+    return name + ":" + dataType + ":" + codeSystem + ":" + code + ":" + index;
   }
 }

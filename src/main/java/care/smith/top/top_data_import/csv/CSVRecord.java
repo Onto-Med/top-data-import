@@ -7,34 +7,34 @@ import java.util.Set;
 
 public class CSVRecord {
 
-  private Map<String, CSVField> recordMap = new HashMap<>();
-  private CSVField[] record;
+  private Map<String, CSVValue> recordMap = new HashMap<>();
+  private CSVValue[] record;
 
-  public CSVRecord(CSVField[] header, String[] values) {
-    record = new CSVField[header.length];
+  public CSVRecord(CSVHead[] header, String[] values) {
+    record = new CSVValue[header.length];
     for (int i = 0; i < header.length; i++) {
-      CSVField val = new CSVField(header[i], values[i], i);
+      CSVValue val = new CSVValue(header[i], values[i]);
       record[i] = val;
       recordMap.put(val.getName(), val);
     }
   }
 
-  public CSVField get(int index) {
+  public CSVValue get(int index) {
     return record[index];
   }
 
-  public CSVField get(String name) {
+  public CSVValue get(String name) {
     return recordMap.get(name);
   }
 
-  public CSVField[] getOthers(String... excludedNames) {
+  public CSVValue[] getOthers(String... excludedNames) {
     return getOthers(Set.of(excludedNames));
   }
 
-  public CSVField[] getOthers(Set<String> excludedNames) {
+  public CSVValue[] getOthers(Set<String> excludedNames) {
     return Arrays.stream(record)
         .filter(f -> !excludedNames.contains(f.getName()))
-        .toArray(CSVField[]::new);
+        .toArray(CSVValue[]::new);
   }
 
   @Override
