@@ -138,7 +138,7 @@ public class CSVHead {
   private static DateTimeFormatter parseFormatter =
       new DateTimeFormatterBuilder()
           .appendPattern(
-              "[yyyy-MM-dd'T'HH:mm:ss][yyyy-MM-dd'T'HH:mm][yyyy-MM-dd][dd.MM.yyyy][dd.MM.yy]")
+              "[yyyy-MM-dd'T'HH:mm:ss.SSS][yyyy-MM-dd'T'HH:mm:ss.SS][yyyy-MM-dd'T'HH:mm:ss.S][yyyy-MM-dd'T'HH:mm:ss][yyyy-MM-dd'T'HH:mm][yyyy-MM-dd][dd.MM.yyyy][dd.MM.yy]")
           .parseDefaulting(ChronoField.HOUR_OF_DAY, 0)
           .parseDefaulting(ChronoField.MINUTE_OF_HOUR, 0)
           .parseDefaulting(ChronoField.SECOND_OF_MINUTE, 0)
