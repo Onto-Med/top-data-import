@@ -15,6 +15,10 @@
 			<id>top-api</id>
 			<url>https://maven.pkg.github.com/onto-med/top-api</url>
 		</repository>
+		<repository>
+			<id>top-phenotypic-query</id>
+			<url>https://maven.pkg.github.com/onto-med/top-phenotypic-query</url>
+		</repository>
 	</repositories>
 
 	<dependencies>
@@ -27,6 +31,12 @@
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>
 			<version>5.9.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>care.smith.top</groupId>
+			<artifactId>top-phenotypic-query</artifactId>
+			<version>0.7.7</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class SESGenerator {
+public class SESGen {
 
   private static final String[] HEADER = {
     "SOZIO_SIC",
@@ -62,9 +62,9 @@ public class SESGenerator {
   };
 
   public static void main(String[] args) throws IOException {
-    try (CSVWriter writer = new CSVWriter(new FileWriter("test_files/csv/ses.csv"))) {
+    try (CSVWriter writer = new CSVWriter(new FileWriter("test_files/csv/ses10.csv"))) {
       writer.writeNext(HEADER);
-      for (int i = 1; i <= 100; i++) writer.writeNext(generateRecord(i));
+      for (int i = 1; i <= 10000; i++) writer.writeNext(generateRecord(i));
     }
   }
 
