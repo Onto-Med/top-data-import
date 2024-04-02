@@ -11,18 +11,23 @@ public class LIFEConverterApp {
 
   private Config config;
   private DB db;
-  private Path csvPath;
+  private Path pvPath;
 
   public LIFEConverterApp(Config config) {
     this.config = config;
     this.db = new DB(config);
-    this.csvPath = Paths.get(config.getCsvPath());
+    this.pvPath = Paths.get(config.getPvPath());
   }
 
   public void convert() throws IOException {
-    Files.list(csvPath)
-        .filter(p -> !Files.isDirectory(p) && p.toString().endsWith(".csv"))
-        .forEach(p -> new LIFEConverter(p, db, config).convert());
+    Files.list(pvPath)
+        .filter(p -> !Files.isDirectory(p))
+        .forEach(
+            p -> {
+              if (p.toString().endsWith(".csv")) new LIFEDataConverter(p, db, config).convert();
+              else if (p.toString().endsWith(".pdf"))
+                new LIFEMetadataConverter(p, config).convert();
+            });
 
     db.printSbj();
     db.printPhe();

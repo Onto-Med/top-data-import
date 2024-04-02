@@ -8,13 +8,13 @@ import care.smith.top.top_data_import.db.DB;
 import java.nio.file.Path;
 import java.util.Arrays;
 
-public class LIFEConverter extends CSVConverter {
+public class LIFEDataConverter extends CSVConverter {
 
   private DB db;
   private Config config;
   private String codeSystem;
 
-  public LIFEConverter(Path path, DB db, Config config) {
+  public LIFEDataConverter(Path path, DB db, Config config) {
     super(path);
     this.db = db;
     this.config = config;

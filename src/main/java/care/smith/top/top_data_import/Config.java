@@ -18,8 +18,12 @@ public class Config {
     }
   }
 
-  public String getCsvPath() {
-    return props.getProperty("csv.path");
+  public String getPvPath() {
+    return props.getProperty("pv.path");
+  }
+
+  public String getPhenotypesPath() {
+    return props.getProperty("phenotypes.path");
   }
 
   public String getDbUrl() {
