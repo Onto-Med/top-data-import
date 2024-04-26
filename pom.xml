@@ -36,7 +36,7 @@
 		<dependency>
 			<groupId>care.smith.top</groupId>
 			<artifactId>top-phenotypic-query</artifactId>
-			<version>0.7.7</version>
+			<version>0.7.9</version>
 		</dependency>
 		<dependency>
 			<groupId>com.h2database</groupId>

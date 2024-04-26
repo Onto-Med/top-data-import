@@ -1,5 +1,7 @@
 package care.smith.top.top_data_import.csv;
 
+import com.opencsv.CSVParser;
+import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvValidationException;
@@ -52,11 +54,23 @@ public abstract class CSVConverter {
 
   protected abstract void convert(CSVRecord csvRecord);
 
+  //  private CSVReader getReader(Path path) throws IOException {
+  //    return new CSVReader(Files.newBufferedReader(path));
+  //  }
+
+  private CSVReaderBuilder getBuilder(Path path) throws IOException {
+    CSVParser parser = new CSVParserBuilder().withSeparator(';').build();
+    return new CSVReaderBuilder(Files.newBufferedReader(path)).withCSVParser(parser);
+  }
+
   private CSVReader getReader(Path path) throws IOException {
-    return new CSVReader(Files.newBufferedReader(path));
+    return getBuilder(path).build();
   }
 
   private CSVReader getReaderWithoutHeader(Path path) throws IOException {
-    return new CSVReaderBuilder(Files.newBufferedReader(path)).withSkipLines(1).build();
+    return getBuilder(path).withSkipLines(1).build();
   }
+  //  private CSVReader getReaderWithoutHeader(Path path) throws IOException {
+  //	  return new CSVReaderBuilder(Files.newBufferedReader(path)).withSkipLines(1).build();
+  //  }
 }
