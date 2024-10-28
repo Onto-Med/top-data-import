@@ -30,7 +30,7 @@ public class Util {
     return true;
   }
 
-  private static DateTimeFormatter parseFormatter =
+  private static final DateTimeFormatter PARSE_FORMATTER =
       new DateTimeFormatterBuilder()
           .appendPattern(
               "[yyyy-MM-dd'T'HH:mm:ss.SSS][yyyy-MM-dd'T'HH:mm:ss.SS][yyyy-MM-dd'T'HH:mm:ss.S][yyyy-MM-dd'T'HH:mm:ss][yyyy-MM-dd'T'HH:mm][yyyy-MM-dd][dd.MM.yyyy][dd.MM.yy]")
@@ -40,6 +40,6 @@ public class Util {
           .toFormatter();
 
   public static LocalDateTime parseDate(String dateTime) {
-    return LocalDateTime.parse(dateTime, parseFormatter);
+    return LocalDateTime.parse(dateTime, PARSE_FORMATTER);
   }
 }

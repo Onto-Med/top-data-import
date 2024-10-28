@@ -1,57 +1,66 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>care.smith.top</groupId>
-	<artifactId>top-data-import</artifactId>
-	<version>0.0.1</version>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>care.smith.top</groupId>
+    <artifactId>top-data-import</artifactId>
+    <version>0.0.1</version>
 
-	<properties>
-		<maven.compiler.source>11</maven.compiler.source>
-		<maven.compiler.target>11</maven.compiler.target>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
+    <name>TOP Data Import</name>
+    <description>
+        A component used with the TOP Framework to import data of the LIFE study.
+        Study data is provided as CSV and metadata as PDF on a project agreement basis.
+        THis component generates phenotype classes in the TOP Framework and transforms the CSV data into an H2 database.
+    </description>
 
-	<repositories>
-		<repository>
-			<id>top-api</id>
-			<url>https://maven.pkg.github.com/onto-med/top-api</url>
-		</repository>
-		<repository>
-			<id>top-phenotypic-query</id>
-			<url>https://maven.pkg.github.com/onto-med/top-phenotypic-query</url>
-		</repository>
-	</repositories>
+    <properties>
+        <java.version>11</java.version>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
-	<dependencies>
-		<dependency>
-			<groupId>care.smith.top</groupId>
-			<artifactId>top-api</artifactId>
-			<version>0.9.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-engine</artifactId>
-			<version>5.9.0</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>care.smith.top</groupId>
-			<artifactId>top-phenotypic-query</artifactId>
-			<version>0.7.9</version>
-		</dependency>
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<version>2.1.214</version>
-		</dependency>
-		<dependency>
-			<groupId>com.opencsv</groupId>
-			<artifactId>opencsv</artifactId>
-			<version>5.9</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.pdfbox</groupId>
-			<artifactId>pdfbox</artifactId>
-			<version>3.0.2</version>
-		</dependency>
-	</dependencies>
+    <repositories>
+        <repository>
+            <id>top-api</id>
+            <url>https://maven.pkg.github.com/onto-med/top-api</url>
+        </repository>
+        <repository>
+            <id>top-phenotypic-query</id>
+            <url>https://maven.pkg.github.com/onto-med/top-phenotypic-query</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <dependency>
+            <groupId>care.smith.top</groupId>
+            <artifactId>top-api</artifactId>
+            <version>0.10.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.9.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>care.smith.top</groupId>
+            <artifactId>top-phenotypic-query</artifactId>
+            <version>0.7.9</version>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>2.1.214</version>
+        </dependency>
+        <dependency>
+            <groupId>com.opencsv</groupId>
+            <artifactId>opencsv</artifactId>
+            <version>5.9</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.pdfbox</groupId>
+            <artifactId>pdfbox</artifactId>
+            <version>3.0.2</version>
+        </dependency>
+    </dependencies>
 </project>

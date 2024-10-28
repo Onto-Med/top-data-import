@@ -9,9 +9,12 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.IntStream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class CSVConverter {
 
+  private final Logger LOGGER = LoggerFactory.getLogger(CSVConverter.class);
   private Path path;
   private CSVHead[] header;
 
@@ -32,7 +35,7 @@ public abstract class CSVConverter {
         for (int i = 0; i < line.length; i++) header[i].setDataType(line[i]);
       csvReader.close();
     } catch (IOException | CsvValidationException e) {
-      e.printStackTrace();
+      LOGGER.warn(e.getMessage(), e);
     }
   }
 
@@ -48,15 +51,11 @@ public abstract class CSVConverter {
       while ((line = csvReader.readNext()) != null) convert(new CSVRecord(header, line));
       csvReader.close();
     } catch (IOException | CsvValidationException e) {
-      e.printStackTrace();
+      LOGGER.warn(e.getMessage(), e);
     }
   }
 
   protected abstract void convert(CSVRecord csvRecord);
-
-  //  private CSVReader getReader(Path path) throws IOException {
-  //    return new CSVReader(Files.newBufferedReader(path));
-  //  }
 
   private CSVReaderBuilder getBuilder(Path path) throws IOException {
     CSVParser parser = new CSVParserBuilder().withSeparator(';').build();
@@ -70,7 +69,4 @@ public abstract class CSVConverter {
   private CSVReader getReaderWithoutHeader(Path path) throws IOException {
     return getBuilder(path).withSkipLines(1).build();
   }
-  //  private CSVReader getReaderWithoutHeader(Path path) throws IOException {
-  //	  return new CSVReaderBuilder(Files.newBufferedReader(path)).withSkipLines(1).build();
-  //  }
 }

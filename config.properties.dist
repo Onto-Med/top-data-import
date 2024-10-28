@@ -1,0 +1,9 @@
+pv.path=examples/project_agreement_1
+phenotypes.path=examples/project_agreement_1
+db.url=jdbc:h2:file:./examples/project_agreement_1/db
+db.user=dbuser
+db.pw=password
+col.id=SIC
+col.date=EDAT
+col.sex=SEX
+col.birthdate=BIRTHDATE

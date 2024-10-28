@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.stream.Stream;
 
 public class LIFEConverterApp {
 
@@ -19,21 +20,25 @@ public class LIFEConverterApp {
     this.pvPath = Paths.get(config.getPvPath());
   }
 
+  public static void main(String[] args) throws IOException {
+    if (args == null || args.length == 0)
+      throw new IllegalArgumentException("Please provide the path to the configuration file!");
+    new LIFEConverterApp(new Config(args[0])).convert();
+  }
+
   public void convert() throws IOException {
-    Files.list(pvPath)
-        .filter(p -> !Files.isDirectory(p))
-        .forEach(
-            p -> {
-              if (p.toString().endsWith(".csv")) new LIFEDataConverter(p, db, config).convert();
-              else if (p.toString().endsWith(".pdf"))
-                new LIFEMetadataConverter(p, config).convert();
-            });
+    try (Stream<Path> paths = Files.list(pvPath)) {
+      paths
+          .filter(p -> !Files.isDirectory(p))
+          .forEach(
+              p -> {
+                if (p.toString().endsWith(".csv")) new LIFEDataConverter(p, db, config).convert();
+                else if (p.toString().endsWith(".pdf"))
+                  new LIFEMetadataConverter(p, config).convert();
+              });
+    }
 
     db.printSbj();
     db.printPhe();
-  }
-
-  public static void main(String[] args) throws IOException {
-    new LIFEConverterApp(new Config("test_files/config.properties")).convert();
   }
 }

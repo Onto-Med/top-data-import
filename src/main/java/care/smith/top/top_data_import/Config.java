@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Properties;
+import org.slf4j.LoggerFactory;
 
 public class Config {
 
@@ -14,7 +15,7 @@ public class Config {
     try {
       props.load(new FileInputStream(configFilePath));
     } catch (IOException e) {
-      e.printStackTrace();
+      LoggerFactory.getLogger(Config.class).warn(e.getMessage(), e);
     }
   }
 
@@ -62,6 +63,6 @@ public class Config {
   }
 
   public static void main(String[] args) {
-    System.out.println(new Config("test_files/config.properties"));
+    System.out.println(new Config("config.properties"));
   }
 }

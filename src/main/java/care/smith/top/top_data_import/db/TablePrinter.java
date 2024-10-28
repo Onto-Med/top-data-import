@@ -6,8 +6,11 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Arrays;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TablePrinter {
+  private final Logger LOGGER = LoggerFactory.getLogger(TablePrinter.class);
 
   private Connection con;
 
@@ -50,12 +53,12 @@ public class TablePrinter {
       System.out.println();
 
     } catch (SQLException e) {
-      e.printStackTrace();
+      LOGGER.warn(e.getMessage(), e);
     }
   }
 
   private String getBorderLine(int columnsNumber, int[] columnsWidths) {
-    StringBuffer bl = new StringBuffer("+");
+    StringBuilder bl = new StringBuilder("+");
     for (int i = 0; i < columnsNumber; i++) bl.append("-".repeat(columnsWidths[i])).append("+");
     return bl.toString();
   }

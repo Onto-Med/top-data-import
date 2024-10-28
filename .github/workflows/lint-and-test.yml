@@ -1,0 +1,38 @@
+---
+name: Lint and test
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "pom.xml"
+      - ".mvn-ci.xml"
+      - "src/**"
+      - ".github/workflows/lint-and-test.yml"
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "pom.xml"
+      - ".mvn-ci.xml"
+      - "src/**"
+      - ".github/workflows/lint-and-test.yml"
+
+jobs:
+  formatting:
+    runs-on: ubuntu-latest
+    env:
+      GH_MAVEN_PKG_AUTH_TOKEN: ${{ secrets.GH_MAVEN_PKG_AUTH_TOKEN }}
+      GH_MAVEN_PKG_USER: ${{ secrets.GH_MAVEN_PKG_USER }}
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check Google Java Style
+        uses: axel-op/googlejavaformat-action@v3
+        with:
+          args: "--skip-reflowing-long-strings --replace"
+          skip-commit: true
+          files: src/**/java/**/*.java
+      - name: Print diffs
+        run: git --no-pager diff --exit-code

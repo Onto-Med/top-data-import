@@ -7,9 +7,11 @@ import care.smith.top.top_data_import.csv.CSVValue;
 import care.smith.top.top_data_import.db.DB;
 import java.nio.file.Path;
 import java.util.Arrays;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class LIFEDataConverter extends CSVConverter {
-
+  private final Logger LOGGER = LoggerFactory.getLogger(LIFEDataConverter.class);
   private DB db;
   private Config config;
   private String codeSystem;
@@ -24,7 +26,7 @@ public class LIFEDataConverter extends CSVConverter {
 
   @Override
   protected void convert(CSVRecord csvRecord) {
-    System.out.println(csvRecord);
+    LOGGER.debug(csvRecord.toString());
 
     String idName = codeSystem + "_" + config.getColId();
     String dateName = codeSystem + "_" + config.getColDate();

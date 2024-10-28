@@ -1,6 +1,7 @@
 package care.smith.top.top_data_import.csv;
 
 import care.smith.top.model.DataType;
+import care.smith.top.top_data_import.Util;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -55,7 +56,7 @@ public class CSVValue {
   }
 
   public LocalDateTime getDateValue() {
-    return (value == null || getDataType() != DataType.DATE_TIME) ? null : CSVHead.parseDate(value);
+    return (value == null || getDataType() != DataType.DATE_TIME) ? null : Util.parseDate(value);
   }
 
   public Boolean getBooleanValue() {

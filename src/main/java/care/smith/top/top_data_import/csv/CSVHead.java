@@ -1,11 +1,7 @@
 package care.smith.top.top_data_import.csv;
 
 import care.smith.top.model.DataType;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
-import java.time.format.DateTimeParseException;
-import java.time.temporal.ChronoField;
+import care.smith.top.top_data_import.Util;
 
 public class CSVHead {
 
@@ -104,10 +100,10 @@ public class CSVHead {
     if (isNumber(val)) {
       if (dataType == null) dataType = DataType.NUMBER;
       else if (dataType != DataType.NUMBER) dataType = DataType.STRING;
-    } else if (isDate(val)) {
+    } else if (Util.isDate(val)) {
       if (dataType == null) dataType = DataType.DATE_TIME;
       else if (dataType != DataType.DATE_TIME) dataType = DataType.STRING;
-    } else if (isBoolean(val)) {
+    } else if (Util.isBoolean(val)) {
       if (dataType == null) dataType = DataType.BOOLEAN;
       else if (dataType != DataType.BOOLEAN) dataType = DataType.STRING;
     } else dataType = DataType.STRING;
@@ -120,32 +116,6 @@ public class CSVHead {
       return false;
     }
     return true;
-  }
-
-  private boolean isBoolean(String v) {
-    return "true".equalsIgnoreCase(v) || "false".equalsIgnoreCase(v);
-  }
-
-  private boolean isDate(String v) {
-    try {
-      parseDate(v);
-    } catch (DateTimeParseException e) {
-      return false;
-    }
-    return true;
-  }
-
-  private static DateTimeFormatter parseFormatter =
-      new DateTimeFormatterBuilder()
-          .appendPattern(
-              "[yyyy-MM-dd'T'HH:mm:ss.SSS][yyyy-MM-dd'T'HH:mm:ss.SS][yyyy-MM-dd'T'HH:mm:ss.S][yyyy-MM-dd'T'HH:mm:ss][yyyy-MM-dd'T'HH:mm][yyyy-MM-dd][dd.MM.yyyy][dd.MM.yy]")
-          .parseDefaulting(ChronoField.HOUR_OF_DAY, 0)
-          .parseDefaulting(ChronoField.MINUTE_OF_HOUR, 0)
-          .parseDefaulting(ChronoField.SECOND_OF_MINUTE, 0)
-          .toFormatter();
-
-  public static LocalDateTime parseDate(String dateTime) {
-    return LocalDateTime.parse(dateTime, parseFormatter);
   }
 
   @Override

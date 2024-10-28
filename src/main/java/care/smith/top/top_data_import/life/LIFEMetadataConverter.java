@@ -17,9 +17,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 import org.apache.logging.log4j.util.Strings;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class LIFEMetadataConverter {
-
+  private final Logger LOGGER = LoggerFactory.getLogger(LIFEMetadataConverter.class);
   private String txt;
   private String[] lines;
   private String assessment;
@@ -27,7 +29,7 @@ public class LIFEMetadataConverter {
   private String tableName;
   private Config config;
 
-  private String COL_TAB_PREFIX;
+  private final String COL_TAB_PREFIX;
   private static final String TAB = "tabelle:";
   private static final String CODE_TEXT = "Code Fragentext";
   private static final String CODE_DESC = "Code Beschreibung";
@@ -55,9 +57,9 @@ public class LIFEMetadataConverter {
     tableAlias = tab[0];
     tableName = tab[1];
     COL_TAB_PREFIX = "(" + tableName + "_";
-    System.out.println(assessment + ":" + tableAlias + ":" + tableName);
-    System.out.println("========================================================");
-    //    for (String line : lines) System.out.println(line);
+    LOGGER.debug(assessment + ":" + tableAlias + ":" + tableName);
+    LOGGER.debug("========================================================");
+    for (String line : lines) LOGGER.debug(line);
   }
 
   public LIFEMetadataConverter(String filePath, Config config) {
@@ -92,19 +94,19 @@ public class LIFEMetadataConverter {
   private Category getGroup(int actualGroupLine) {
     int lastGroupLine = getLastGroupLine(actualGroupLine);
     String name = lines[actualGroupLine].substring(QUEST_GROUP.length()).trim();
-    String desc = null;
+    StringBuilder desc = null;
 
     for (int i = actualGroupLine + 1; i <= lastGroupLine; i++) {
-      if (desc == null) desc = lines[i];
-      else desc += " " + lines[i];
+      if (desc == null) desc = new StringBuilder(lines[i]);
+      else desc.append(" ").append(lines[i]);
     }
 
-    System.out.println("---------- GROUP ----------");
-    System.out.println(name + ":" + desc);
-    System.out.println("---------------------------");
+    LOGGER.debug("---------- GROUP ----------");
+    LOGGER.debug(name + ":" + desc);
+    LOGGER.debug("---------------------------");
 
     if (desc == null) return new Cat(cleanID(name)).titleDe(name).get();
-    return new Cat(cleanID(name)).titleDe(name).descriptionDe(desc).get();
+    return new Cat(cleanID(name)).titleDe(name).descriptionDe(desc.toString()).get();
   }
 
   private int getLastGroupLine(int actualGroupLine) {
@@ -137,7 +139,7 @@ public class LIFEMetadataConverter {
 
     String desc = getDescription(props, aliasPlusDatatypeLength, actualItemLine, lastItemLine);
 
-    System.out.println(name + ":" + alias + ":" + datatype + ":" + desc);
+    LOGGER.debug(name + ":" + alias + ":" + datatype + ":" + desc);
 
     Phe phe = new Phe(name, tableAlias, name).titleDe(alias).descriptionDe(desc);
     if ("TEXT".equals(datatype)) phe.string();
@@ -162,19 +164,20 @@ public class LIFEMetadataConverter {
   private String getDescription(
       String[] props, int aliasPlusDatatypeLength, int actualItemLine, int lastItemLine) {
 
-    String desc =
-        Strings.join(List.of(props).subList(1, props.length - aliasPlusDatatypeLength), ' ');
+    StringBuilder desc =
+        new StringBuilder(
+            Strings.join(List.of(props).subList(1, props.length - aliasPlusDatatypeLength), ' '));
 
     String descPart =
         lines[actualItemLine].substring(0, lines[actualItemLine].indexOf(COL_TAB_PREFIX)).trim();
-    if (!descPart.isBlank()) desc += " " + descPart;
+    if (!descPart.isBlank()) desc.append(" ").append(descPart);
 
     for (int i = actualItemLine + 1; i <= lastItemLine; i++) {
       if (CODE_LIST.matcher(lines[i]).find()) break;
-      desc += " " + lines[i];
+      desc.append(" ").append(lines[i]);
     }
 
-    return desc;
+    return desc.toString();
   }
 
   private void getCodeList(int actualItemLine, int lastItemLine, Phenotype phe) {
@@ -194,7 +197,7 @@ public class LIFEMetadataConverter {
         int split = lines[i].indexOf(" ");
         String code = lines[i].substring(0, split).trim();
         String label = lines[i].substring(split + 1).trim();
-        System.out.println(code + ":" + label);
+        LOGGER.debug(code + ":" + label);
 
         phenotypes.add(
             new Phe(phe.getId() + "_" + code)
@@ -210,10 +213,7 @@ public class LIFEMetadataConverter {
   public static void main(String[] args) {
 
     new LIFEMetadataConverter(
-            "test_files/pv/T00001.pdf", new Config("test_files/config.properties"))
+            "examples/project_agreement_1/D00001_Example.pdf", new Config("config.properties"))
         .convert();
-
-    //    new LIFEMetadataConverter("test_files/D00140.pdf", new
-    // Config("test_files/config.properties")).convert();
   }
 }

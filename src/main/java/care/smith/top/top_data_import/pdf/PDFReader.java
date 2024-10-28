@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
+import org.slf4j.LoggerFactory;
 
 public class PDFReader {
 
@@ -26,7 +27,7 @@ public class PDFReader {
       document.close();
       return text;
     } catch (IOException e) {
-      e.printStackTrace();
+      LoggerFactory.getLogger(PDFReader.class).warn(e.getMessage(), e);
     }
     return null;
   }

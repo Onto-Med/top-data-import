@@ -17,36 +17,36 @@ public class DB {
   private Connection con;
 
   private static final String CREATE_SBJ =
-      "CREATE TABLE subject (\r\n"
-          + "    subject_id text NOT NULL,\r\n"
-          + "    birth_date timestamp,\r\n"
-          + "    sex        text,\r\n"
-          + "    PRIMARY KEY (subject_id)\r\n"
+      "CREATE TABLE subject (\n"
+          + "    subject_id text NOT NULL,\n"
+          + "    birth_date timestamp,\n"
+          + "    sex        text,\n"
+          + "    PRIMARY KEY (subject_id)\n"
           + ")";
 
   private static final String CREATE_PHE =
-      "CREATE TABLE phenotype (\r\n"
-          + "    subject_id      text NOT NULL,\r\n"
-          + "    created_at      timestamp,\r\n"
-          + "    code_system     text NOT NULL,\r\n"
-          + "    code            text NOT NULL,\r\n"
-          + "    unit            text,\r\n"
-          + "    number_value    numeric(20,3),\r\n"
-          + "    text_value      text,\r\n"
-          + "    date_time_value timestamp,\r\n"
-          + "    boolean_value   boolean\r\n"
+      "CREATE TABLE phenotype (\n"
+          + "    subject_id      text NOT NULL,\n"
+          + "    created_at      timestamp,\n"
+          + "    code_system     text NOT NULL,\n"
+          + "    code            text NOT NULL,\n"
+          + "    unit            text,\n"
+          + "    number_value    numeric(20,3),\n"
+          + "    text_value      text,\n"
+          + "    date_time_value timestamp,\n"
+          + "    boolean_value   boolean\n"
           + ")";
 
   private TablePrinter tablePrinter;
 
-  private Logger log = LoggerFactory.getLogger(DB.class);
+  private final Logger LOGGER = LoggerFactory.getLogger(DB.class);
 
   public DB(Config config) {
     try {
       con = DriverManager.getConnection(config.getDbUrl(), config.getDbUser(), config.getDbPw());
       tablePrinter = new TablePrinter(con);
     } catch (SQLException e) {
-      e.printStackTrace();
+      LOGGER.warn(e.getMessage(), e);
     }
 
     execute("DROP ALL OBJECTS");
@@ -125,13 +125,13 @@ public class DB {
   }
 
   private void execute(String sql) {
-    log.debug("execute sql statement:{}{}", System.lineSeparator(), sql);
+    LOGGER.debug("execute sql statement:{}{}", System.lineSeparator(), sql);
     try {
       Statement stmt = con.createStatement();
       stmt.execute(sql);
       stmt.close();
     } catch (SQLException e) {
-      e.printStackTrace();
+      LOGGER.warn(e.getMessage(), e);
     }
   }
 
@@ -139,7 +139,7 @@ public class DB {
     try {
       con.close();
     } catch (SQLException e) {
-      e.printStackTrace();
+      LOGGER.warn(e.getMessage(), e);
     }
   }
 
@@ -152,7 +152,7 @@ public class DB {
   }
 
   public static void main(String[] args) {
-    Config config = new Config("test_files/config.properties");
+    Config config = new Config("config.properties");
     DB db = new DB(config);
 
     CSVValue id1 = new CSVValue("SOZIO_SIC", "1", DataType.STRING);

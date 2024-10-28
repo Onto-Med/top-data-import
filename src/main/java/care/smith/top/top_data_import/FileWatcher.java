@@ -14,8 +14,12 @@ import java.nio.file.WatchService;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashMap;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class FileWatcher {
+
+  private final Logger LOGGER = LoggerFactory.getLogger(FileWatcher.class);
 
   private final WatchService watcher;
   private final Map<WatchKey, Path> keys;
@@ -37,9 +41,9 @@ public class FileWatcher {
     keys.put(key, dir);
   }
 
-  /** Register the given directory, and all its sub-directories, with the WatchService. */
+  /** Register the given directory, and all its subdirectories, with the WatchService. */
   private void walkAndRegisterDirectories(final Path start) throws IOException {
-    // register directory and sub-directories
+    // register directory and subdirectories
     Files.walkFileTree(
         start,
         new SimpleFileVisitor<Path>() {
@@ -55,7 +59,7 @@ public class FileWatcher {
   /**
    * Process all events for keys queued to the watcher
    *
-   * @throws InterruptedException
+   * @throws InterruptedException if the watcher was interrupted
    */
   void processEvents() throws InterruptedException {
 
@@ -81,14 +85,14 @@ public class FileWatcher {
         System.out.format("%s: %s\n", event.kind().name(), child);
 
         // if directory is created, and watching recursively, then register it and its
-        // sub-directories
+        // subdirectories
         if (kind == StandardWatchEventKinds.ENTRY_CREATE) {
           try {
             if (Files.isDirectory(child)) {
               walkAndRegisterDirectories(child);
             }
           } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.warn(e.getMessage(), e);
           }
         }
       }
@@ -106,7 +110,7 @@ public class FileWatcher {
     }
   }
 
-  public static void main(String[] args) throws IOException {
+  public static void main(String[] args) {
     Path dir = Paths.get("test_files");
     try {
       new FileWatcher(dir).processEvents();
