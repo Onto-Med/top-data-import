@@ -1,2 +1,3 @@
 *.properties
 *.trace.db
+/target/
