@@ -1,6 +1,9 @@
 package care.smith.top.top_data_import.default_csv_import;
 
 import care.smith.top.top_data_import.default_csv_import.config.DefaultConfig;
+import care.smith.top.top_data_import.default_csv_import.config.Field;
+import care.smith.top.top_data_import.default_csv_import.config.PhenotypeField;
+import care.smith.top.top_data_import.default_csv_import.exception.UnmappedFieldException;
 import com.opencsv.CSVParser;
 import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
@@ -10,6 +13,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 import org.slf4j.Logger;
@@ -17,7 +21,7 @@ import org.slf4j.LoggerFactory;
 
 public abstract class DefaultCSVImport {
 
-  private final Logger LOGGER = LoggerFactory.getLogger(DefaultCSVImport.class);
+  protected final Logger LOGGER = LoggerFactory.getLogger(DefaultCSVImport.class);
   protected DefaultConfig config;
   protected DefaultDB db;
   private CSVReader csvReader;
@@ -33,6 +37,13 @@ public abstract class DefaultCSVImport {
     } catch (IOException | CsvValidationException e) {
       LOGGER.warn(e.getMessage(), e);
     }
+  }
+
+  protected void checkHeader(EnumMap<? extends Field, String> fields, String tableName)
+      throws UnmappedFieldException {
+    for (String head : header)
+      if (!fields.values().contains(head.trim()))
+        throw new UnmappedFieldException(head.trim(), tableName);
   }
 
   public void write() {
@@ -54,8 +65,11 @@ public abstract class DefaultCSVImport {
 
   protected abstract void write(Map<String, String> record);
 
-  public static void main(String[] args) {
+  public static void main(String[] args) throws UnmappedFieldException {
     DefaultConfig c = new DefaultConfig("jdbc:h2:file:./test_files/test_db", "user", "pw");
+    c.setPhenotypeField(PhenotypeField.DATE_TIME, "time_stamp");
+    c.setPhenotypeField(PhenotypeField.UNIT, "unit_of_measure");
+
     DefaultDB db = new DefaultDB(c);
 
     SubjectCSVImport sbj = new SubjectCSVImport(Paths.get("test_files/subjects.csv"), c, db);
