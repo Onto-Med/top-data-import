@@ -18,7 +18,7 @@ public class TablePrinter {
     this.con = con;
   }
 
-  protected void print(String table) {
+  public void print(String table) {
     try {
       Statement st =
           con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
