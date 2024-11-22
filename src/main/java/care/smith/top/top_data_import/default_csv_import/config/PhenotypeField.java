@@ -1,61 +1,58 @@
 package care.smith.top.top_data_import.default_csv_import.config;
 
-import care.smith.top.top_data_import.default_csv_import.exception.IllegalFieldException;
+import care.smith.top.model.DataType;
+import java.util.EnumMap;
 
-public enum PhenotypeField {
-  PHENOTYPE_ID(
-      "phenotype_id",
-      "phenotypeid",
-      "observationid",
-      "conditionid",
-      "medicationid",
-      "procedureid",
-      "id"),
-  ENCOUNTER_ID("encounter_id", "encounterid"),
-  SUBJECT_ID("subject_id", "subjectid", "patientid"),
-  DATE_TIME("date_time", "datetime", "timestamp", "createdat"),
-  START_DATE_TIME("start_date_time", "startdatetime", "starttimestamp", "start", "periodstart"),
-  END_DATE_TIME("end_date_time", "enddatetime", "endtimestamp", "end", "periodend"),
-  CODE_SYSTEM("code_system", "codesystem", "terminology"),
-  CODE("code", "code"),
-  UNIT(
-      "unit",
-      "unit",
-      "unitofmeasurement",
-      "unitofmeasure",
-      "measuringunit",
-      "measurementunit",
-      "measureunit"),
-  NUMBER_VALUE("number_value", "numbervalue", "decimalvalue"),
-  TEXT_VALUE("text_value", "textvalue", "stringvalue"),
-  DATE_TIME_VALUE("date_time_value", "datetimevalue", "timestampvalue"),
-  BOOLEAN_VALUE("boolean_value", "booleanvalue");
+public enum PhenotypeField implements Field {
+  PHENOTYPE_ID("phenotype_id", "text NOT NULL", DataType.STRING),
+  ENCOUNTER_ID("encounter_id", "text", DataType.STRING),
+  SUBJECT_ID("subject_id", "text", DataType.STRING),
+  CODE_SYSTEM("code_system", "text NOT NULL", DataType.STRING),
+  CODE("code", "text NOT NULL", DataType.STRING),
+  DATE_TIME("date_time", "timestamp", DataType.DATE_TIME),
+  START_DATE_TIME("start_date_time", "timestamp", DataType.DATE_TIME),
+  END_DATE_TIME("end_date_time", "timestamp", DataType.DATE_TIME),
+  UNIT("unit", "text", DataType.STRING),
+  NUMBER_VALUE("number_value", "numeric(20,3)", DataType.NUMBER),
+  TEXT_VALUE("text_value", "text", DataType.STRING),
+  DATE_TIME_VALUE("date_time_value", "timestamp", DataType.DATE_TIME),
+  BOOLEAN_VALUE("boolean_value", "boolean", DataType.BOOLEAN);
 
   public static final String TABLE_NAME = "phenotype";
 
   private String fieldName;
-  private String[] allowedFieldNames;
+  private String dbProperties;
+  private DataType dataType;
 
-  private PhenotypeField(String fieldName, String... allowedFieldNames) {
+  private PhenotypeField(String fieldName, String dbProperties, DataType dataType) {
     this.fieldName = fieldName;
-    this.allowedFieldNames = allowedFieldNames;
+    this.dbProperties = dbProperties;
+    this.dataType = dataType;
   }
 
+  @Override
   public String getFieldName() {
     return fieldName;
   }
 
-  private String[] getAllowedFieldNames() {
-    return allowedFieldNames;
+  @Override
+  public String getDBProperties() {
+    return dbProperties;
   }
 
+  @Override
+  public DataType getDataType() {
+    return dataType;
+  }
+
+  @Override
   public String getPropertyName() {
     return TABLE_NAME + "." + getFieldName();
   }
 
-  public static PhenotypeField getField(String fieldName) throws IllegalFieldException {
-    for (PhenotypeField field : PhenotypeField.values())
-      if (Util.isAllowedName(fieldName, field.getAllowedFieldNames())) return field;
-    throw new IllegalFieldException(fieldName, TABLE_NAME);
+  public static EnumMap<PhenotypeField, String> getFields() {
+    EnumMap<PhenotypeField, String> fields = new EnumMap<>(PhenotypeField.class);
+    for (PhenotypeField field : PhenotypeField.values()) fields.put(field, field.getFieldName());
+    return fields;
   }
 }

@@ -1,37 +1,48 @@
 package care.smith.top.top_data_import.default_csv_import.config;
 
-import care.smith.top.top_data_import.default_csv_import.exception.IllegalFieldException;
+import care.smith.top.model.DataType;
+import java.util.EnumMap;
 
-public enum SubjectField {
-  SUBJECT_ID("subject_id", "subjectid", "patientid", "id"),
-  BIRTH_DATE("birth_date", "birthdate", "dateofbirth"),
-  SEX("sex", "sex", "gender");
+public enum SubjectField implements Field {
+  SUBJECT_ID("subject_id", "text NOT NULL", DataType.STRING),
+  BIRTH_DATE("birth_date", "timestamp", DataType.DATE_TIME),
+  SEX("sex", "text", DataType.STRING);
 
   public static final String TABLE_NAME = "subject";
 
   private String fieldName;
-  private String[] allowedFieldNames;
+  private String dbProperties;
+  private DataType dataType;
 
-  private SubjectField(String fieldName, String... allowedFieldNames) {
+  private SubjectField(String fieldName, String dbProperties, DataType dataType) {
     this.fieldName = fieldName;
-    this.allowedFieldNames = allowedFieldNames;
+    this.dbProperties = dbProperties;
+    this.dataType = dataType;
   }
 
+  @Override
   public String getFieldName() {
     return fieldName;
   }
 
-  private String[] getAllowedFieldNames() {
-    return allowedFieldNames;
+  @Override
+  public String getDBProperties() {
+    return dbProperties;
   }
 
+  @Override
+  public DataType getDataType() {
+    return dataType;
+  }
+
+  @Override
   public String getPropertyName() {
     return TABLE_NAME + "." + getFieldName();
   }
 
-  public static SubjectField getField(String fieldName) throws IllegalFieldException {
-    for (SubjectField field : SubjectField.values())
-      if (Util.isAllowedName(fieldName, field.getAllowedFieldNames())) return field;
-    throw new IllegalFieldException(fieldName, TABLE_NAME);
+  public static EnumMap<SubjectField, String> getFields() {
+    EnumMap<SubjectField, String> fields = new EnumMap<>(SubjectField.class);
+    for (SubjectField field : SubjectField.values()) fields.put(field, field.getFieldName());
+    return fields;
   }
 }

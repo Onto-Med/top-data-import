@@ -1,30 +1,33 @@
 package care.smith.top.top_data_import.default_csv_import.config;
 
 import care.smith.top.top_data_import.Config;
-import care.smith.top.top_data_import.default_csv_import.exception.IllegalFieldException;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.EnumMap;
 import java.util.Properties;
+import java.util.Set;
 import org.slf4j.LoggerFactory;
 
-public class DefaultCSVConfig {
+public class DefaultConfig {
 
   private String dbURL;
   private String dbUser;
   private String dbPassword;
 
-  private Map<String, SubjectField> subjectFields = new HashMap<>();
-  private Map<String, EncounterField> encounterFields = new HashMap<>();
-  private Map<String, PhenotypeField> phenotypeFields = new HashMap<>();
+  private EnumMap<SubjectField, String> subjectFields = SubjectField.getFields();
+  private EnumMap<EncounterField, String> encounterFields = EncounterField.getFields();
+  private EnumMap<PhenotypeField, String> phenotypeFields = PhenotypeField.getFields();
 
-  public DefaultCSVConfig() {}
+  public DefaultConfig() {}
 
-  public DefaultCSVConfig(String configFilePath) {
+  public DefaultConfig(String dbURL, String dbUser, String dbPassword) {
+    setDatabase(dbURL, dbUser, dbPassword);
+  }
+
+  public DefaultConfig(String configFilePath) {
     try {
       Properties props = new Properties();
       props.load(new FileInputStream(configFilePath));
@@ -56,32 +59,38 @@ public class DefaultCSVConfig {
   }
 
   public void setSubjectField(SubjectField field, String fieldName) {
-    subjectFields.put(fieldName, field);
-  }
-
-  public SubjectField getSubjectField(String fieldName) throws IllegalFieldException {
-    SubjectField field = subjectFields.get(fieldName);
-    if (field != null) return field;
-    return SubjectField.getField(fieldName);
+    if (field != null && fieldName != null) subjectFields.put(field, fieldName);
   }
 
   public void setEncounterField(EncounterField field, String fieldName) {
-    encounterFields.put(fieldName, field);
-  }
-
-  public EncounterField getEncounterField(String fieldName) throws IllegalFieldException {
-    EncounterField field = encounterFields.get(fieldName);
-    if (field != null) return field;
-    return EncounterField.getField(fieldName);
+    if (field != null && fieldName != null) encounterFields.put(field, fieldName);
   }
 
   public void setPhenotypeField(PhenotypeField field, String fieldName) {
-    phenotypeFields.put(fieldName, field);
+    if (field != null && fieldName != null) phenotypeFields.put(field, fieldName);
   }
 
-  public PhenotypeField getPhenotypeField(String fieldName) throws IllegalFieldException {
-    PhenotypeField field = phenotypeFields.get(fieldName);
-    if (field != null) return field;
-    return PhenotypeField.getField(fieldName);
+  public EnumMap<SubjectField, String> getSubjectCSVFields() {
+    return subjectFields;
+  }
+
+  public EnumMap<EncounterField, String> getEncounterCSVFields() {
+    return encounterFields;
+  }
+
+  public EnumMap<PhenotypeField, String> getPhenotypeCSVFields() {
+    return phenotypeFields;
+  }
+
+  public Set<SubjectField> getSubjectFields() {
+    return subjectFields.keySet();
+  }
+
+  public Set<EncounterField> getEncounterFields() {
+    return encounterFields.keySet();
+  }
+
+  public Set<PhenotypeField> getPhenotypeFields() {
+    return phenotypeFields.keySet();
   }
 }
