@@ -70,7 +70,7 @@ public abstract class DefaultCSVImport {
     c.setPhenotypeField(PhenotypeField.DATE_TIME, "time_stamp");
     c.setPhenotypeField(PhenotypeField.UNIT, "unit_of_measure");
 
-    DefaultDB db = new DefaultDB(c);
+    DefaultDB db = new DefaultDB(c).initialise();
 
     SubjectCSVImport sbj = new SubjectCSVImport(Paths.get("test_files/subjects.csv"), c, db);
     sbj.write();

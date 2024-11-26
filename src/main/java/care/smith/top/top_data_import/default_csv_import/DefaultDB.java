@@ -36,16 +36,19 @@ public class DefaultDB {
     } catch (SQLException e) {
       LOGGER.warn(e.getMessage(), e);
     }
+  }
 
+  public DefaultDB initialise() {
     dropTables();
-    createTables();
+    return createTables();
   }
 
-  public void dropTables() {
+  public DefaultDB dropTables() {
     execute("DROP ALL OBJECTS");
+    return this;
   }
 
-  public void createTables() {
+  public DefaultDB createTables() {
     execute(
         getCreateTableStatement(
             SubjectField.TABLE_NAME, config.getSubjectFields(), SubjectField.SUBJECT_ID));
@@ -55,6 +58,7 @@ public class DefaultDB {
     execute(
         getCreateTableStatement(
             PhenotypeField.TABLE_NAME, config.getPhenotypeFields(), PhenotypeField.PHENOTYPE_ID));
+    return this;
   }
 
   public void insertSubject(Map<String, String> record) {

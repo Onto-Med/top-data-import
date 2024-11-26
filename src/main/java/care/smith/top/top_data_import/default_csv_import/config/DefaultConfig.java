@@ -35,13 +35,13 @@ public class DefaultConfig {
       setDatabase(
           props.getProperty("db.url"), props.getProperty("db.user"), props.getProperty("db.pw"));
 
-      for (SubjectField field : SubjectField.values())
+      for (SubjectField field : getSubjectFields())
         setSubjectField(field, props.getProperty(field.getPropertyName()));
 
-      for (EncounterField field : EncounterField.values())
+      for (EncounterField field : getEncounterFields())
         setEncounterField(field, props.getProperty(field.getPropertyName()));
 
-      for (PhenotypeField field : PhenotypeField.values())
+      for (PhenotypeField field : getPhenotypeFields())
         setPhenotypeField(field, props.getProperty(field.getPropertyName()));
     } catch (IOException e) {
       LoggerFactory.getLogger(Config.class).warn(e.getMessage(), e);
@@ -49,9 +49,9 @@ public class DefaultConfig {
   }
 
   public void setDatabase(String url, String user, String password) {
-    this.dbURL = url;
-    this.dbUser = user;
-    this.dbPassword = password;
+    this.dbURL = url.trim();
+    this.dbUser = user.trim();
+    this.dbPassword = password.trim();
   }
 
   public Connection getDatabaseConnection() throws SQLException {
@@ -59,15 +59,18 @@ public class DefaultConfig {
   }
 
   public void setSubjectField(SubjectField field, String fieldName) {
-    if (field != null && fieldName != null) subjectFields.put(field, fieldName);
+    if (field != null && fieldName != null && !fieldName.isBlank())
+      subjectFields.put(field, fieldName.trim());
   }
 
   public void setEncounterField(EncounterField field, String fieldName) {
-    if (field != null && fieldName != null) encounterFields.put(field, fieldName);
+    if (field != null && fieldName != null && !fieldName.isBlank())
+      encounterFields.put(field, fieldName.trim());
   }
 
   public void setPhenotypeField(PhenotypeField field, String fieldName) {
-    if (field != null && fieldName != null) phenotypeFields.put(field, fieldName);
+    if (field != null && fieldName != null && !fieldName.isBlank())
+      phenotypeFields.put(field, fieldName.trim());
   }
 
   public EnumMap<SubjectField, String> getSubjectCSVFields() {
